@@ -4,7 +4,7 @@ AppDynamics extension checks to see if Office 365 is available
 
 ###### Installation
 
-Centos
+1. Centos
     - Install and Configure the AppDynamics MachineAgent
     - Navigate to the machine agent directory under monitors
     - Clone the github repository
