@@ -4,16 +4,16 @@ AppDynamics extension checks to see if Office 365 is available
 
 ###### Installation
 
-1. Centos
+Centos
     - Install and Configure the AppDynamics MachineAgent
     - Navigate to the machine agent directory under monitors
     - Clone the github repository
       ```
-        git clone https://github.com/nikpapage/ThousandEyes.git
+        git clone https://github.com/optimizca/appdextension.git
       ```
     - Navigate to the Extension's directory
       ```
-        cd ThousandEyes
+        cd appdextension
       ```
     - Provide the correct permissions to the executable files
       ```
@@ -28,50 +28,11 @@ AppDynamics extension checks to see if Office 365 is available
       ```
         chmod 700 createSchema.sh
         ./createSchema.sh -h 
-        #Example: ./createSchema.sh -sc TE -ac global_account_hehg1h2b3jh5b4324n2nfs -k kkkkk-aaaaa-xxxxx-yyyyy -es "https://fra-ana-api.saas.appdynamics.com" -port          443
-      ```
-    - Change the frequency under monitor.xml
-    - Restart the machine agent
-    
-2. Ubuntu
-    - Install and Configure the AppDynamics MachineAgent
-    - Navigate to the machine agent directory under monitors
-    - Clone the github repository
-      ```
-        git clone https://github.com/nikpapage/ThousandEyes.git
-      ```
-    - Navigate to the Extension's directory
-      ```
-        cd ThousandEyes
-      ```
-    - Provide the correct permissions to the executable files
-      ```
-        chmod 700 appdte.sh 
-        chmod 700 appdte.py
-      ```
-    - Install Python3 (The tested version of Ubuntu 18.04 does not have python installed)
-      ```
-        sudo apt install python3
-      ```
-    - Modify startup script to use the python3 installation
-      ```
-        vi appdte.sh
-      ```
-        change python to python3
-    - Run the bash Script (Tes)
-      ```
-        sudo apt install python3
-        ./appdte.sh
-      ```
-    - The First time the code runs creates a script for the AppDynamics analytics schema creation. If needed run this adding the appropriate flags.
-      ```
-        chmod 700 createSchema.sh
-        ./createSchema.sh -h 
         #Example: ./createSchema.sh -sc TE -ac global_account_hehg1h2b3jh5b4324n2nfs -k kkkkk-aaaaa-xxxxx-yyyyy -es "https://fra-ana-api.saas.appdynamics.com" -port 443
       ```
     - Change the frequency under monitor.xml
     - Restart the machine agent
-  
+    
 ##### Configuration Options
  - The extension needs to be configured with proper information in order to function. You will need to follow the following instructions for Office 365:
  1. To allow authentication you first need to register your application at Azure App Registrations.
