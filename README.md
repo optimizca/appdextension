@@ -1,13 +1,5 @@
-# AppDynamics & ThousandEyes Integration
-AppDynamics extension to pull data from ThousandEyes tests and import them into AppDynamics using the APIs
-
-###### Metric Types
-The extension pulls the APIs below for metrics
-```
-net/metrics/
-web/page-load/
-web/http-server/
-```
+# AppDynamics with Office 365
+AppDynamics extension checks to see if Office 365 is available
 
 
 ###### Installation
@@ -80,36 +72,27 @@ web/http-server/
     - Change the frequency under monitor.xml
     - Restart the machine agent
   
-  
-###### Startup Options
-   - Changing the default configuration file location, modify appdte.sh 
-       ```
-       python appdte.py -c <config_file_location>
-       ```
-       or
-       ```
-       python appdte.py --config <config_file_location>
-       ```
-   - Changing the log path, 
-       ```
-       python appdte.py --logPath <path to log file>
-       ```
-   - Changing the log level, 
-       ```
-       python appdte.py -v
-       ```
-       or
-       ```
-       python3 appdte.py --verbose
-       ```
-   - Complete Example
-       ```
-       python appdte.py -c '/home/ec2-user/te_appd.yml' --logPath '/home/ec2-user/appd_te.log' -v
-       ```
+##### Configuration Options
+ - The extension needs to be configured with proper information in order to function. You will need to follow the following instructions for Office 365:
+ 1. To allow authentication you first need to register your application at Azure App Registrations.
+    1. Login at Azure Portal (App Registrations)
+    2. Create an app. Set a name.
+    3. In Supported account types choose "Accounts in any organizational directory and personal Microsoft accounts (e.g. Skype, Xbox, Outlook.com)", if you are using a personal       account.
+    4. Set the redirect uri (Web) to: https://login.microsoftonline.com/common/oauth2/nativeclient and click register. This needs to be inserted into the "Redirect URI" text box       as simply checking the check box next to this link seems to be insufficent. This is the default redirect uri used by this library, but you can use any other if you want.
+    5. Write down the Application (client) ID. You will need this value.
+
+    6. Under "Certificates & secrets", generate a new client secret. Set the expiration preferably to never. Write down the value of the client secret created now. It will be          hidden later on.
+    7. Under Api Permissions:
+    * add the application permissions for Microsoft Graph you want.
+    * Click on the Grant Admin Consent button (if you have admin permissions) or wait until the admin has given consent to your application.
+    * As an example, to read and send emails use:
+     * Mail.ReadWrite
+     * Mail.Send
+     * User.Read
        
 ###### Certificates
   - TLS CA Authority
-      The repository comes with a predefined ca-bundle file and configuration defaults to it. The ca-bundle is used to verify the ThousandEyes and AppDynamics         endpoints. The user has the ability to point the python script to a preexisting CA bundle or disable the Verification.     
+      The repository comes with a predefined ca-bundle file and configuration defaults to it. The ca-bundle is used to verify AppDynamics endpoints. The user has the ability to point the python script to a preexisting CA bundle or disable the Verification.     
       Default
        ```
         TLSCertificate:
