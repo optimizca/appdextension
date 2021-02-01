@@ -54,7 +54,8 @@ AppDynamics extension checks to see if Office 365 is available
      * Mail.ReadWrite
      * Mail.Send
      * User.Read
-       
+- The client id and tenant id will be available on the App overview page ex:
+<br/> ![ids](https://github.com/optimizca/appdextension/blob/master/img/ids.PNG)
 - The client id, tenant id and client secret need to be added to the bottom of appdte.py starting from line 286 to 292. Also ensure to fill out the email, sender, subject and body
 ```
     client_id = ""
