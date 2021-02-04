@@ -13,11 +13,11 @@ from requests.auth import HTTPBasicAuth
 # Used for creating logs
 if not os.path.exists('logs'):
     os.makedirs('logs')
-logging.basicConfig(filename='logs/appd_te.log', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(filename='logs/appd.log', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 # Opens yml file
-config_file='te_appd.yml'
+config_file='appd.yml'
 log_level=logging.INFO
 
 # Get full command-line arguments
@@ -34,7 +34,7 @@ except getopt.error as err:
     logging.error(str(err))
     pass
 
-log_filename='logs/appd_te.log'
+log_filename='logs/appd.log'
 log_level=logging.INFO
 
 for current_argument, current_value in arguments:
@@ -67,13 +67,13 @@ for current_argument, current_value in arguments:
 
 
 
-logging.info("Started AppDynamics & Thousand Eyes Extension")
+logging.info("Started AppDynamics")
 test_fields = []
 metric_fields = []
-te_config = []
 appd_config = []
 testIds = []
-extension_schema={}
+office365_config = []
+#extension_schema={}
 # Create Client
 client = requests.session()
 
@@ -144,15 +144,14 @@ try:
         logging.debug("Full Config Loaded from file: "+str(data))
         # Create the schema creation command
         extension_dict={}
-        te_account_group=''
-        extension_host=''
+        #te_account_group=''
+        #extension_host=''
         try:
-            te_account_group=data['ThousandEyes']['TEConfig']['teAccountGroup']
-            extension_host=data['ThousandEyes']['AppDynamics']['hostname']
+            extension_host=data['Optimiz']['AppDynamics']['hostname']
         except Exception as error:
-            logging.warning("Failed to extract ThousandEyes id or hostname")
-        extension_schema.update({'AccountGroup': te_account_group} if te_account_group is not None else {})
-        extension_schema.update({'extensionHost': extension_host} if extension_host is not None else {})
+            logging.warning("Failed to extract hostname")
+        #extension_schema.update({'AccountGroup': te_account_group} if te_account_group is not None else {})
+        #extension_schema.update({'extensionHost': extension_host} if extension_host is not None else {})
 
         schema_dict = {"tenantId": "string",
                         "serverName": "string",
@@ -165,16 +164,15 @@ try:
         }
         if not os.path.exists("./createSchema.sh"):
             appdynamics_create_schema(schema_dict)
-        for item in data['ThousandEyes']['Test']:
+        for item in data['Optimiz']['Test']:
             test_fields.append(item)
-        for item in data['ThousandEyes']['Metrics']:
+        for item in data['Optimiz']['Metrics']:
             metric_fields.append(item)
-        te_config = data['ThousandEyes']['TEConfig']
-        test_ids = te_config['tetestId']
-        appd_config = data['ThousandEyes']['AppDynamics']
-        tls_certificate= data['ThousandEyes']['TLSCertificate']
+        appd_config = data['Optimiz']['AppDynamics']
+        office365_config = data['Optimiz']['Office365']
+        tls_certificate= data['Optimiz']['TLSCertificate']
 except Exception as err:
-    logging.error("Failed to parse te_appd.yml in the following directory " + os.getcwd())
+    logging.error("Failed to parse appd.yml in the following directory " + os.getcwd())
     logging.error(err)
 
 # Checks to make sure the tls is present
@@ -285,50 +283,29 @@ def get_o365_data():
     from O365 import Account
     import socket
     import time
-    import shelve
 
     try:
-        mydict = {}
-        mydict["client_id"] = None
-        mydict["client_secret"] = None
-        mydict["tenant_id"] = None
-        mydict["email"] = None
-        mydict["sender"] = None
-        mydict["subject"] = None
-        mydict["body"] = None
-
-        text = open("config.txt", "r").readlines()
-        lines = []
-
-        for o in text:
-            lines.append(o.replace("\n", ""))
-
-        i = 0
-        for key in mydict.keys():
-            mydict[key] = lines[i]
-            i = i + 1
-
         start_time = time.time()
-        cred = (mydict["client_id"], mydict["client_secret"])
-        account = Account(cred, auth_flow_type='credentials', tenant_id=mydict["tenant_id"])
+        cred = (office365_config["client_id"], office365_config["client_secret"])
+        account = Account(cred, auth_flow_type='credentials', tenant_id=office365_config["tenant_id"])
         if account.authenticate():
             print("Authenticated")
             auth_time = time.time() - start_time
 
-            m = account.new_message(resource=mydict["sender"])
-            m.to.add(mydict["email"])
-            m.subject = mydict["subject"]
-            m.body = mydict["body"]
+            m = account.new_message(resource=office365_config["sender"])
+            m.to.add(office365_config["email"])
+            m.subject = office365_config["subject"]
+            m.body = office365_config["body"]
             m.send()
 
             send_time = time.time() - start_time
 
             data = {'status': 'Success',
-                    'tenantId': str(mydict["tenant_id"]),
+                    'tenantId': str(office365_config["tenant_id"]),
                     'serverName': socket.gethostname(),
                     'location': '',
-                    'destination': str(mydict["email"]),
-                    'senderEmail': str(mydict["sender"]),
+                    'destination': str(office365_config["email"]),
+                    'senderEmail': str(office365_config["sender"]),
                     'time_to_auth': str(auth_time),
                     'time_to_send': str(send_time)
             }

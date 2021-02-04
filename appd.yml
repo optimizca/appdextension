@@ -1,4 +1,4 @@
-ThousandEyes:
+Optimiz:
   Extension:
     AccountGroup: "string"
     extensionHost: "string"
@@ -25,35 +25,28 @@ ThousandEyes:
     agentId: "integer"
     roundId: "integer"
     permalink: "string"
-  TEConfig:
-    teAPI: "https://api.thousandeyes.com/v6/"
-    #Table of comma separated values for the test ids that will be added to the extension
-    #Single value example [123456]
-    #Multiple values example [123456, 123457]
-    tetestId: []
-    #Thousand Eyes user name
-    #Value should be within double quotes
-    teUsername: ""
-    #Thousand Eyes API Key, can be found under user's profile
-    #Value should be within double quotes
-    teKey: ""
-    #Thousand Eyes Account Group
-    #Uncommend if there are more than one account groups for account
-    teAccountGroup: ""
   AppDynamics:
     #Events Service endpoint in the format of protocol:uri:port example https://fra-ana-api.saas.appdynamics.com:443
     #Value should be within double quotes
-    appdEventsService: ""
+    appdEventsService: "https://analytics.api.appdynamics.com:443"
     #AppDynamics Analytics API key, this can be created under Analytics -> Configuration
     #Value should be within double quotes
-    analyticsApiKey: ""
+    analyticsApiKey: "4fc57551-89fb-4465-b484-daf4edbd17af"
     #AppDynamics global account name 
     #Value should be within double quotes
-    globalAccountName: ""
+    globalAccountName: "gwl-test_e34f2ad3-3829-404a-bd11-80643ea829d1"
     #AppDynamics custom schema name
     #Value should be within double quotes
-    schemaName: ""
+    schemaName: "office365Test3"
     #Hostname of the extension
     hostname: ""
+  Office365:
+    client_id: "7ac278f5-a253-45b1-9607-6bc2abb9d190"
+    client_secret: "2~2_Tx67besGh-jADBWr475e-_x5oaqgpL"
+    tenant_id: "d0f42c72-e0fb-4c7b-8ad0-cce3ab69207f"
+    email: "richard@schentag.co"
+    sender: "rschentag@optimiz.ca"
+    subject: "test"
+    body: "test"
   TLSCertificate:
     certificateBundlePath: "certificates/appd-te.ca-bundle"
