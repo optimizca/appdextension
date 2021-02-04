@@ -67,7 +67,7 @@ for current_argument, current_value in arguments:
 
 
 
-logging.info("Started AppDynamics & Thousand Eyes Extension")
+logging.info("Started AppDynamics")
 test_fields = []
 metric_fields = []
 te_config = []
@@ -159,7 +159,9 @@ try:
                         "status": "string",
                         "location": "string",
                         "destination": "string",
-                        "senderEmail": "string"
+                        "senderEmail": "string",
+                        "time_to_auth": "string",
+                        "time_to_send": "string"
         }
         if not os.path.exists("./createSchema.sh"):
             appdynamics_create_schema(schema_dict)
@@ -282,39 +284,47 @@ def post_appdynamics_data(data):
 def get_o365_data():
     from O365 import Account
     import socket
+    import time
 
     client_id = ""
     client_secret = ""
-    tenant_id = ""
+    tenant_id = ''
     email = ""
     sender = ""
     subject = ""
     body = ""
 
     try:
+        start_time = time.time()
         cred = (client_id, client_secret)
         account = Account(cred, auth_flow_type='credentials', tenant_id=tenant_id)
         if account.authenticate():
             print("Authenticated")
-            
+            auth_time = time.time() - start_time
+
             m = account.new_message(resource=sender)
             m.to.add(email)
             m.subject = subject
             m.body = body
             m.send()
 
+            send_time = time.time() - start_time
+
             data = {'status': 'Success',
                     'tenantId': tenant_id,
                     'serverName': socket.gethostname(),
                     'location': '',
                     'destination': email,
-                    'senderEmail': sender
+                    'senderEmail': sender,
+                    'time_to_auth': str(auth_time),
+                    'time_to_send': str(send_time)
             }
-
+            print("Success")
             post_appdynamics_data(data)
-
+        
     except:
         data = {"status": "Failed"}
+        print("Failed")
         post_appdynamics_data(data)
 
 get_o365_data()
