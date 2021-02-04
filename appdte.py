@@ -67,7 +67,7 @@ for current_argument, current_value in arguments:
 
 
 
-logging.info("Started AppDynamics")
+logging.info("Started AppDynamics & Thousand Eyes Extension")
 test_fields = []
 metric_fields = []
 te_config = []
@@ -285,47 +285,58 @@ def get_o365_data():
     from O365 import Account
     import socket
     import time
-
-    client_id = ""
-    client_secret = ""
-    tenant_id = ''
-    email = ""
-    sender = ""
-    subject = ""
-    body = ""
+    import shelve
 
     try:
+        mydict = {}
+        mydict["client_id"] = None
+        mydict["client_secret"] = None
+        mydict["tenant_id"] = None
+        mydict["email"] = None
+        mydict["sender"] = None
+        mydict["subject"] = None
+        mydict["body"] = None
+
+        text = open("config.txt", "r").readlines()
+        lines = []
+
+        for o in text:
+            lines.append(o.replace("\n", ""))
+
+        i = 0
+        for key in mydict.keys():
+            mydict[key] = lines[i]
+            i = i + 1
+
         start_time = time.time()
-        cred = (client_id, client_secret)
-        account = Account(cred, auth_flow_type='credentials', tenant_id=tenant_id)
+        cred = (mydict["client_id"], mydict["client_secret"])
+        account = Account(cred, auth_flow_type='credentials', tenant_id=mydict["tenant_id"])
         if account.authenticate():
             print("Authenticated")
             auth_time = time.time() - start_time
 
-            m = account.new_message(resource=sender)
-            m.to.add(email)
-            m.subject = subject
-            m.body = body
+            m = account.new_message(resource=mydict["sender"])
+            m.to.add(mydict["email"])
+            m.subject = mydict["subject"]
+            m.body = mydict["body"]
             m.send()
 
             send_time = time.time() - start_time
 
             data = {'status': 'Success',
-                    'tenantId': tenant_id,
+                    'tenantId': str(mydict["tenant_id"]),
                     'serverName': socket.gethostname(),
                     'location': '',
-                    'destination': email,
-                    'senderEmail': sender,
+                    'destination': str(mydict["email"]),
+                    'senderEmail': str(mydict["sender"]),
                     'time_to_auth': str(auth_time),
                     'time_to_send': str(send_time)
             }
-            print("Success")
             post_appdynamics_data(data)
         
     except:
         data = {"status": "Failed"}
-        print("Failed")
-        post_appdynamics_data(data)
+        #post_appdynamics_data(data)
 
 get_o365_data()
 
