@@ -41,7 +41,7 @@ AppDynamics extension checks to see if Office 365 is available
 ##### Configuration Requirements
  - The extension needs to be configured with proper information in order to function. You will need to follow the following instructions for Office 365:
  1. To allow authentication you first need to register your application at Azure App Registrations.
-    1. Login at Azure Portal (App Registrations)
+    1. Login at [Azure Portal (App Registrations)](https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade)
     2. Create an app. Set a name.
     3. In Supported account types choose "Accounts in any organizational directory and personal Microsoft accounts (e.g. Skype, Xbox, Outlook.com)", if you are using a personal       account.
     4. Set the redirect uri (Web) to: https://login.microsoftonline.com/common/oauth2/nativeclient and click register. This needs to be inserted into the "Redirect URI" text box       as simply checking the check box next to this link seems to be insufficent. This is the default redirect uri used by this library, but you can use any other if you want.
