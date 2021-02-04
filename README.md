@@ -35,7 +35,7 @@ AppDynamics extension checks to see if Office 365 is available
         #Example: ./createSchema.sh -sc TE -ac global_account_hehg1h2b3jh5b4324n2nfs -k kkkkk-aaaaa-xxxxx-yyyyy -es "https://fra-ana-api.saas.appdynamics.com" -port 443
       ```
     - Change the frequency under monitor.xml
-    - Add AppDynamics controller information to te_appd.yml
+    - Add AppDynamics controller information to appd.yml
     - Restart the machine agent
     
 ##### Configuration Requirements
@@ -56,17 +56,7 @@ AppDynamics extension checks to see if Office 365 is available
      * User.Read
 - The client id and tenant id will be available on the App overview page ex:
 <br/> ![ids](https://github.com/optimizca/appdextension/blob/master/img/ids.PNG)
-- The client id, tenant id and client secret need to be added to the bottom of appdte.py starting from line 286 to 292. Also ensure to fill out the email, sender, subject and body
-```
-    client_id = ""
-    client_secret = ""
-    tenant_id = ""
-    email = ""
-    sender = ""
-    subject = ""
-    body = ""
-
-```
+- The gathered client id, tenant id and client secret can now be added to the appd.yml file, as well as the desired emails, subject and body.
 ###### Certificates
   - TLS CA Authority
       The repository comes with a predefined ca-bundle file and configuration defaults to it. The ca-bundle is used to verify AppDynamics endpoints. The user has the ability to point the python script to a preexisting CA bundle or disable the Verification.     
