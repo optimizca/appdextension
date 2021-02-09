@@ -21,8 +21,8 @@ AppDynamics extension checks to see if Office 365 is available
     ```
     - Provide the correct permissions to the executable files
       ```
-        chmod 700 appdte.sh 
-        chmod 700 appdte.py
+        chmod 700 appdemail.sh 
+        chmod 700 appdemail.py
       ```
     - Run the bash Script (Centos has a preinstall version of python and therefore there shouldn't be any further changes)
       ```
