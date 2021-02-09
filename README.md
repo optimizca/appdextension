@@ -32,7 +32,7 @@ AppDynamics extension checks to see if Office 365 is available
       ```
         chmod 700 createSchema.sh
         ./createSchema.sh -h 
-        #Example: ./createSchema.sh -sc TE -ac global_account_hehg1h2b3jh5b4324n2nfs -k kkkkk-aaaaa-xxxxx-yyyyy -es "https://fra-ana-api.saas.appdynamics.com" -port 443
+        #Example: ./createSchema.sh -sc office365 -ac global_account_vvvv -k kkkkk-aaaaa-xxxxx-yyyyy -es "https://analytics.api.appdynamics.com" -port 443
       ```
     - Change the frequency under monitor.xml
     - Add AppDynamics controller information to appd.yml
