@@ -15,7 +15,7 @@
         <execution-timeout-in-secs>120</execution-timeout-in-secs>
         <executable-task>
           <type>file</type>
-          <file>appdte.sh</file>
+          <file>appdemail.sh</file>
         </executable-task>
    </monitor-run-task>
 </monitor>

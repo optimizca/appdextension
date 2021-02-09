@@ -164,10 +164,6 @@ try:
         }
         if not os.path.exists("./createSchema.sh"):
             appdynamics_create_schema(schema_dict)
-        for item in data['Optimiz']['Test']:
-            test_fields.append(item)
-        for item in data['Optimiz']['Metrics']:
-            metric_fields.append(item)
         appd_config = data['Optimiz']['AppDynamics']
         office365_config = data['Optimiz']['Office365']
         tls_certificate= data['Optimiz']['TLSCertificate']
@@ -267,8 +263,8 @@ def post_appdynamics_data(data):
     schema = "[" + schema + "]"
     
     try:
-        logging.info("Pushing data into AppDynamics schema")
-        logging.debug("Pushing data into AppDynamics schema: "+schema)
+        logging.info("Pushing data into AppDynamics schema"+events_service_url)
+        logging.debug("Pushing data into AppDynamics schema: "+events_service_url)
         response = requests.request("POST", events_service_url, headers=headers, data=schema , verify=certificate_bundle)
         if(response.status_code>204):
             logging.warning("POST data to AppDynamics failed with code: "+str(response.status_code))
@@ -289,7 +285,6 @@ def get_o365_data():
         cred = (office365_config["client_id"], office365_config["client_secret"])
         account = Account(cred, auth_flow_type='credentials', tenant_id=office365_config["tenant_id"])
         if account.authenticate():
-            print("Authenticated")
             auth_time = time.time() - start_time
 
             m = account.new_message(resource=office365_config["sender"])
@@ -303,23 +298,40 @@ def get_o365_data():
             data = {'status': 'Success',
                     'tenantId': str(office365_config["tenant_id"]),
                     'serverName': socket.gethostname(),
-                    'location': '',
+                    'location': str(office365_config["location"]),
                     'destination': str(office365_config["email"]),
                     'senderEmail': str(office365_config["sender"]),
-                    'time_to_auth': str(auth_time),
-                    'time_to_send': str(send_time)
+                    'time_to_auth': auth_time,
+                    'time_to_send': send_time
             }
             post_appdynamics_data(data)
-        
+        else: 
+            logging.error("Authenticatio to mail server failed")
+            data = {'status': 'Failed',
+                    'tenantId': str(office365_config["tenant_id"]),
+                    'serverName': socket.gethostname(),
+                    'location': str(office365_config["location"]),
+                    'destination': str(office365_config["email"]),
+                    'senderEmail': str(office365_config["sender"]),
+                    'time_to_auth': 0,
+                    'time_to_send': 0
+            }
+            post_appdynamics_data(data)
     except:
-        data = {"status": "Failed"}
-        #post_appdynamics_data(data)
-
-get_o365_data()
+        print("failed")
+        data = {'status': 'Failed',
+                    'tenantId': str(office365_config["tenant_id"]),
+                    'serverName': socket.gethostname(),
+                    'location': str(office365_config["location"]),
+                    'destination': str(office365_config["email"]),
+                    'senderEmail': str(office365_config["sender"]),
+                    'time_to_auth': 0,
+                    'time_to_send': 0
+            }
+        post_appdynamics_data(data)
 
 def delete_schema(schema):
-    port = appd_config['appdEventsService'].find("m:")
-    url = appd_config['appdEventsService'][0:36+1]
+    events_service_url = appd_config['appdEventsService']
     api_key = appd_config['analyticsApiKey']
     account_name = appd_config['globalAccountName']
 
@@ -328,5 +340,8 @@ def delete_schema(schema):
         'X-Events-API-Key': api_key,
         'Content-type': 'application/vnd.appd.events+json;v=2'
     }
+    
+    requests.delete(events_service_url + "/events/schema/" + schema, headers=headers)
 
-    requests.delete(url + ":9080/events/schema/" + schema, headers=headers)
+#delete_schema("office365")
+get_o365_data()

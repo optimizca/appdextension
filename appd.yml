@@ -2,33 +2,10 @@ Optimiz:
   Extension:
     AccountGroup: "string"
     extensionHost: "string"
-  Test:
-    enabled: "integer"
-    testId: "integer"
-    testName: "string"
-    interval: "integer"
-    createdDate: "date"
-    type: "string"
-    protocol: "string"
-    createdBy: "string"
-    apiLinks: "string"
-  Metrics:
-    avgLatency: "float"
-    loss: "float"
-    maxLatency: "float"
-    jitter: "float"
-    minLatency: "float"
-    serverIp: "string"
-    agentName: "string"
-    countryId: "string"
-    date: "date"
-    agentId: "integer"
-    roundId: "integer"
-    permalink: "string"
   AppDynamics:
     #Events Service endpoint in the format of protocol:uri:port example https://fra-ana-api.saas.appdynamics.com:443
     #Value should be within double quotes
-    appdEventsService: ""
+    appdEventsService: "https://analytics.api.appdynamics.com:443"
     #AppDynamics Analytics API key, this can be created under Analytics -> Configuration
     #Value should be within double quotes
     analyticsApiKey: ""
@@ -37,7 +14,7 @@ Optimiz:
     globalAccountName: ""
     #AppDynamics custom schema name
     #Value should be within double quotes
-    schemaName: ""
+    schemaName: "office365"
     #Hostname of the extension
     hostname: ""
   Office365:
@@ -45,8 +22,9 @@ Optimiz:
     client_secret: ""
     tenant_id: ""
     email: ""
-    sender: ""
-    subject: ""
-    body: ""
+    sender: "oawwad@optimiz.ca"
+    subject: "TEST Email"
+    body: "this is a test"
+    location: "toronto"
   TLSCertificate:
     certificateBundlePath: "certificates/appd-te.ca-bundle"
