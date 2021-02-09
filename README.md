@@ -26,7 +26,7 @@ AppDynamics extension checks to see if Office 365 is available
       ```
     - Run the bash Script (Centos has a preinstall version of python and therefore there shouldn't be any further changes)
       ```
-        ./appdte.sh
+        ./appdemail.sh 
       ```
     - The First time the code runs creates a script for the AppDynamics analytics schema creation. If needed run this adding the appropriate flags.
       ```
